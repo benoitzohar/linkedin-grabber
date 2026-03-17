@@ -279,7 +279,8 @@ function deriveNameFromTitle(tabTitle) {
 
   const firstCut = title.split("|")[0].trim();
   const secondCut = firstCut.split(" - ")[0].trim();
-  return secondCut || "Unknown Profile";
+  const withoutNotificationCount = secondCut.replace(/^(\(\d+\)\s*)+/u, "").trim();
+  return withoutNotificationCount || "Unknown Profile";
 }
 
 function humanizeErrorCode(errorCode) {

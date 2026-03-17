@@ -3,13 +3,13 @@
 Chrome extension that collects open LinkedIn profile tabs and copies a bullet list with clickable profile links for pasting into Google Docs.
 
 <!-- latest-zip-link:start -->
-**Latest ZIP:** [linkedin-grabber-v1.0.3.zip](./dist/linkedin-grabber-v1.0.3.zip)
+**Latest ZIP:** [linkedin-grabber-v1.0.3.zip](https://github.com/benoitzohar/linkedin-grabber/raw/refs/heads/main/dist/linkedin-grabber-v1.0.3.zip)
 <!-- latest-zip-link:end -->
 
 ## Install from GitHub (for users)
 
 1. Go to the repository page on GitHub.
-2. Download a release ZIP from the `dist/` artifact committed in the repo or from GitHub Releases (for example: `linkedin-grabber-v1.0.1.zip`).
+2. Click the **Latest ZIP** link above to download directly from GitHub (or use GitHub Releases).
 3. Unzip it locally.
 4. Open Chrome and go to `chrome://extensions`.
 5. Enable **Developer mode**.

@@ -64,15 +64,75 @@ function copyItemIntoStaging(item, stagingDir) {
   cpSync(sourcePath, targetPath, { recursive: true });
 }
 
+function execReadStdout(command, args) {
+  try {
+    return execFileSync(command, args, {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"]
+    }).trim();
+  } catch (_error) {
+    return "";
+  }
+}
+
+function parseGitHubRemote(remoteUrl) {
+  if (!remoteUrl) {
+    return null;
+  }
+
+  const httpsMatch = remoteUrl.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+?)(?:\.git)?$/i);
+  if (httpsMatch) {
+    return { owner: httpsMatch[1], repo: httpsMatch[2] };
+  }
+
+  const sshMatch = remoteUrl.match(/^git@github\.com:([^/]+)\/([^/]+?)(?:\.git)?$/i);
+  if (sshMatch) {
+    return { owner: sshMatch[1], repo: sshMatch[2] };
+  }
+
+  const sshUrlMatch = remoteUrl.match(/^ssh:\/\/git@github\.com\/([^/]+)\/([^/]+?)(?:\.git)?$/i);
+  if (sshUrlMatch) {
+    return { owner: sshUrlMatch[1], repo: sshUrlMatch[2] };
+  }
+
+  return null;
+}
+
+function getPreferredGitBranch() {
+  const originHeadRef = execReadStdout("git", ["symbolic-ref", "--short", "refs/remotes/origin/HEAD"]);
+  if (originHeadRef.startsWith("origin/")) {
+    return originHeadRef.slice("origin/".length);
+  }
+
+  const currentBranch = execReadStdout("git", ["branch", "--show-current"]);
+  return currentBranch || "main";
+}
+
+function buildLatestZipLink(releaseFolderName) {
+  const remoteUrl = execReadStdout("git", ["remote", "get-url", "origin"]);
+  const repo = parseGitHubRemote(remoteUrl);
+  if (!repo) {
+    return `./dist/${releaseFolderName}.zip`;
+  }
+
+  const branch = getPreferredGitBranch()
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+
+  return `https://github.com/${repo.owner}/${repo.repo}/raw/refs/heads/${branch}/dist/${releaseFolderName}.zip`;
+}
+
 function updateReadmeLatestZipLink(releaseFolderName) {
   if (!existsSync(README_PATH)) {
     return;
   }
 
   const currentReadme = readFileSync(README_PATH, "utf8");
+  const latestZipUrl = buildLatestZipLink(releaseFolderName);
   const latestZipBlock = [
     README_LATEST_ZIP_START,
-    `**Latest ZIP:** [${releaseFolderName}.zip](./dist/${releaseFolderName}.zip)`,
+    `**Latest ZIP:** [${releaseFolderName}.zip](${latestZipUrl})`,
     README_LATEST_ZIP_END
   ].join("\n");
 

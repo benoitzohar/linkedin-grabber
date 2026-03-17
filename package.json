@@ -1,0 +1,9 @@
+{
+  "name": "linkedin-grabber",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Chrome extension to copy LinkedIn profile links as Google Docs bullet lists.",
+  "scripts": {
+    "release:zip": "node scripts/release.mjs"
+  }
+}

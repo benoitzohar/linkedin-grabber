@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LinkedIn Grabber</title>
+    <link rel="stylesheet" href="./popup.css" />
+  </head>
+  <body>
+    <main class="popup">
+      <header class="header">
+        <h1>LinkedIn Grabber</h1>
+        <p>Click any row to toggle selection, then copy linked bullets for Google Docs.</p>
+      </header>
+
+      <section class="content">
+        <div class="top-actions">
+          <button id="selectAllButton" class="select-all-button" type="button" hidden>
+            Select all
+          </button>
+        </div>
+        <div id="status" class="status status-info">Scanning current window tabs...</div>
+        <ul id="profileList" class="profile-list"></ul>
+      </section>
+
+      <footer class="footer">
+        <button id="copyButton" class="copy-button" type="button" disabled>Copy</button>
+      </footer>
+    </main>
+
+    <script type="module" src="./popup.js"></script>
+  </body>
+</html>
